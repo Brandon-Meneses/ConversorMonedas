@@ -2,6 +2,7 @@ package org.example;
 
 import java.util.Map;
 
+
 class ExchangeRateResponse {
     private String result;
     private String base_code;

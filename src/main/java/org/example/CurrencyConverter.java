@@ -5,6 +5,8 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -13,6 +15,7 @@ public class CurrencyConverter {
     private static final String API_KEY = "11f110c95f02c00f1bd76bea";
     private static final String API_URL = "https://v6.exchangerate-api.com/v6/" + API_KEY + "/latest/USD";
     private static ExchangeRateResponse exchangeRateResponse;
+    private static List<ConversionRecord> historialConversiones = new ArrayList<>();
 
     public static void main(String[] args) {
         obtenerTasasDeCambio();
@@ -26,11 +29,17 @@ public class CurrencyConverter {
                 System.out.println("2. Convertir USD a ARS");
                 System.out.println("3. Convertir PEN a USD");
                 System.out.println("4. Convertir ARS a USD");
-                System.out.println("5. Salir");
+                System.out.println("5. Mostrar historial de conversiones");
+                System.out.println("6. Salir");
 
                 int opcion = scanner.nextInt();
-                if (opcion == 5) {
+                if (opcion == 6) {
                     break;
+                }
+
+                if (opcion == 5) {
+                    mostrarHistorial();
+                    continue;
                 }
 
                 System.out.print("Ingrese la cantidad: ");
@@ -67,6 +76,8 @@ public class CurrencyConverter {
         try {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
+
+
             // Crear instancia de Gson
             Gson gson = new Gson();
             // Parsear la respuesta JSON a un objeto Java
@@ -92,9 +103,22 @@ public class CurrencyConverter {
             double tasaDesde = tasas.get(monedaDesde);
             double tasaHacia = tasas.get(monedaHacia);
             double cantidadConvertida = (cantidad / tasaDesde) * tasaHacia;
-            System.out.printf("%.2f %s = %.2f %s%n", cantidad, monedaDesde, cantidadConvertida, monedaHacia);
+            ConversionRecord registro = new ConversionRecord(cantidad, monedaDesde, monedaHacia, cantidadConvertida);
+            historialConversiones.add(registro);
+            System.out.println(registro);
         } else {
             System.out.println("La conversión de moneda no está soportada.");
+        }
+    }
+
+    private static void mostrarHistorial() {
+        if (historialConversiones.isEmpty()) {
+            System.out.println("No hay conversiones en el historial.");
+        } else {
+            System.out.println("Historial de Conversiones:");
+            for (ConversionRecord registro : historialConversiones) {
+                System.out.println(registro);
+            }
         }
     }
 }
