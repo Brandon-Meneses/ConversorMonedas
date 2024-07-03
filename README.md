@@ -7,10 +7,6 @@ Este proyecto es un convertidor de monedas basado en Java que utiliza la API de 
 - [Descripción](#descripción)
 - [Requisitos](#requisitos)
 - [Instalación](#instalación)
-- [Uso](#uso)
-- [Código de Ejemplo](#código-de-ejemplo)
-- [Contribuir](#contribuir)
-- [Licencia](#licencia)
 
 ## Descripción
 
